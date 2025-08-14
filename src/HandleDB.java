@@ -29,7 +29,7 @@ public class HandleDB {
             return;
         }
 
-        // Now connect directly to CollegeDB
+        
         String dbUrl = "jdbc:mysql://localhost:3306/CollegeDB";
         try (Connection con = DriverManager.getConnection(dbUrl, username, password);
                 Statement stmnt = con.createStatement()) {

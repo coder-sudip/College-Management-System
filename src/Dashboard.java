@@ -23,8 +23,9 @@ public class Dashboard {
                 System.out.println("2. Remove Faculty");
                 System.out.println("3. Update Faculty Details");
                 System.out.println("4. Faculty Credentials");
-                System.out.println("5. Back to Admin Dashboard");
-                int facultyChoice = App.choiceSelector(sc, 1, 5);
+                System.out.println("5. View All Faculty");
+                System.out.println("6. Back to Admin Dashboard");
+                int facultyChoice = App.choiceSelector(sc, 1, 6);
                 switch (facultyChoice) {
                     case 1 -> {
                         Crud crud = new Crud();
@@ -47,12 +48,28 @@ public class Dashboard {
                         Crud crud = new Crud();
                         crud.facultyPWD();
                         adminDashboard();
-
-
                     }
                     case 5 -> {
+                        Crud crud = new Crud();
+                        String[][] fRecords=crud.viewAllFaculty();
                         App.clearConsole();
-                        adminDashboard(); // Go back to Admin Dashboard
+                        System.out.println("Faculty Records:");
+                        System.out.println("-----------------");
+                        System.out.println("ID\tName");
+                        System.out.println("-----------------");
+                        for (String[] record : fRecords) {
+                            System.out.println(record[0] + "\t" + record[1]);
+                        }
+                        System.out.println("-----------------");
+                        System.out.print("\nPress Enter to continue...");
+                        sc.nextLine();
+                        App.clearConsole();
+                        adminDashboard();
+
+                    }
+                    case 6 -> {
+                        App.clearConsole();
+                        adminDashboard(); 
                     }
 
                 }
@@ -66,8 +83,9 @@ public class Dashboard {
                 System.out.println("2. Remove Student");
                 System.out.println("3. Update Student Details");
                 System.out.println("4. Student Credentials");
-                System.out.println("5. Back to Admin Dashboard");
-                int studentChoice = App.choiceSelector(sc, 1, 5);
+                System.out.println("5. View All Students");
+                System.out.println("6. Back to Admin Dashboard");
+                int studentChoice = App.choiceSelector(sc, 1, 6);
                 switch (studentChoice) {
                     case 1 -> {
                         Crud crud = new Crud();
@@ -94,8 +112,26 @@ public class Dashboard {
                         adminDashboard();
                     }
                     case 5 -> {
+                        Crud crud = new Crud();
+                        String[][] sRecords=crud.viewAllStudents();
                         App.clearConsole();
+                        System.out.println("Student Records:");
+                        System.out.println("------------------------------");
+                        System.out.println("ID\tName\tDepartment");
+                        System.out.println("------------------------------");
+                        for (String[] record : sRecords) {
+                            System.out.println(record[0] + "\t" + record[1] + "\t" + record[2]);
+                        }
+                        System.out.println("------------------------------");
+                        System.out.print("\nPress Enter to continue...");
                         sc.nextLine();
+                        App.clearConsole();
+                        adminDashboard();
+
+                    }
+
+                    case 6 -> {
+                        App.clearConsole();
                         adminDashboard(); // Go back to Admin Dashboard
                     }
                 }
@@ -109,8 +145,10 @@ public class Dashboard {
                 System.out.println("1. Add Course");
                 System.out.println("2. Remove Course");
                 System.out.println("3. Update Course Details");
-                System.out.println("4. Back to Admin Dashboard");
-                int courseChoice = App.choiceSelector(sc, 1, 4);
+                System.out.println("4. View All Courses");
+                // Added option to view all courses
+                System.out.println("5. Back to Admin Dashboard");
+                int courseChoice = App.choiceSelector(sc, 1, 5);
                 switch (courseChoice) {
                     case 1 -> {
                         Crud crud = new Crud();
@@ -131,20 +169,37 @@ public class Dashboard {
                         adminDashboard();
                     }
                     case 4 -> {
+                        Crud crud = new Crud();
+                        String[][] cRecords=crud.viewAllCourses();
+                        App.clearConsole();
+                        System.out.println("Course Records:");
+                        System.out.println("--------------------");
+                        System.out.println("ID\tName");
+                        System.out.println("--------------------");
+                        for (String[] record : cRecords) {
+                            System.out.println(record[0] + "\t" + record[1]);
+                        }
+                        System.out.println("---------------------");
+                        System.out.print("\nPress Enter to continue...");
                         sc.nextLine();
                         App.clearConsole();
-                        App.loginType(); // Go back to login type selection
-                        App.roleSelection(); // Allow user to select a role
+                        adminDashboard();
+
+                    }
+                    case 5 -> {
+                        App.clearConsole();
+                        App.loginType(); 
+                        App.roleSelection(); 
                     }
                 }
             }
             case 4 -> {
                 System.out.println("Logging out...");
-                System.out.println("Press Enter to continue...");
+                System.out.print("Press Enter to continue...");
                 sc.nextLine();
                 App.clearConsole();
-                App.loginType(); // Go back to login type selection
-                App.roleSelection(); // Allow user to select a role
+                App.loginType(); 
+                App.roleSelection(); 
 
             }
 
@@ -166,32 +221,31 @@ public class Dashboard {
         int choice = App.choiceSelector(sc, 1, 4);
         switch (choice) {
             case 1 -> {
-                System.out.println("Viewing assigned courses...");
                 crud.viewAssignedCourses();
-                System.out.println("Press Enter to continue...");
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
-                facultyDashboard(fid); // Go back to Faculty Dashboard
+                facultyDashboard(fid); 
             }
             case 2 -> {
                 crud.addMarks();
                 System.out.println("Marks put successfully.");
-                System.out.println("Press Enter to continue...");
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
-                facultyDashboard(fid); // Go back to Faculty Dashboard
+                facultyDashboard(fid); 
             }
             case 3 -> {
                 crud.viewStudentMarks();
-                System.out.println("Press Enter to continue...");
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
-                facultyDashboard(fid); // Go back to Faculty Dashboard
+                facultyDashboard(fid); 
             }
             case 4 -> {
                 System.out.println("Logging out...");
-                System.out.println("Press Enter to continue...");
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
                 App.clearConsole();
-                App.loginType(); // Go back to login type selection
-                App.roleSelection(); // Allow user to select a role
+                App.loginType(); 
+                App.roleSelection(); 
             }
         }
 
@@ -214,31 +268,33 @@ public class Dashboard {
         switch (choice) {
             case 1 -> {
                 crud.viewCourses();
-                System.out.println("Press Enter to continue...");
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
-                studentDashboard(sid); // Go back to Student Dashboard
+                App.clearConsole();
+                studentDashboard(sid); 
             }
             case 2 -> {
                 crud.checkResults();
-                System.out.println("Press Enter to continue...");
-                sc.nextLine();
-                studentDashboard(sid); // Go back to Student Dashboard
-            }
-            case 3 -> {
-                crud.changeStudentPassword();
-                System.out.println("Password changed successfully.");
-                System.out.println("Press Enter to continue...");
-                sc.nextLine();
-                studentDashboard(sid); // Go back to Student Dashboard
-            }
-            case 4 -> {
-                System.out.println("Logging out...");
-                System.out.println("Press Enter to continue...");
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
                 App.clearConsole();
+                studentDashboard(sid); 
+            }
+            case 3 -> {
+                crud.changeStudentPassword(sid);
+                System.out.print("\nPress Enter to continue...");
                 sc.nextLine();
-                App.loginType(); // Go back to login type selection
-                App.roleSelection(); // Allow user to select a role
+                App.clearConsole();
+
+                studentDashboard(sid); 
+            }
+            case 4 -> {
+                System.out.println("Logged out successfully.");
+                System.out.print("\nPress Enter to continue...");
+                sc.nextLine();
+                App.clearConsole();
+                App.loginType(); 
+                App.roleSelection(); 
             }
         }
     }

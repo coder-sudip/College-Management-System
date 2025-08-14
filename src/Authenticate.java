@@ -61,17 +61,16 @@ public class Authenticate {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String dbUsername = rs.getString("username");
-                System.out.println("DB Username: " + dbUsername);
-                System.out.println("IN tHIS POINT");
                 try {
                     
-                    Thread.sleep(1000); // Simulate delay for debugging
+                    Thread.sleep(1000); 
                 } catch (Exception e) { 
 
                 }
                 String dbPassword = rs.getString("password");   
                 if (dbUsername.equals(username) && dbPassword.equals(password)) {
                     System.out.println("Authentication successful for Faculty ID: " + fid);
+                    
                     return true;
                 }
                 

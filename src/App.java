@@ -16,20 +16,27 @@ public class App {
         }
     }
 
+   
+
     static int idValidator() {
         Scanner sc = new Scanner(System.in);
-        if (sc.hasNextInt()) {
-            int id = sc.nextInt();
-            if (id > 0) {
-                sc.close();
-                return id;
+        int id = -1;
+
+        while (true) {
+            System.out.print("Enter a positive integer ID: ");
+            String input = sc.nextLine().trim();
+
+            try {
+                id = Integer.parseInt(input);
+                if (id > 0) {
+                    return id; // valid positive ID
+                } else {
+                    System.out.println("Invalid input. Please enter a positive integer.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a positive integer.");
             }
-        } else {
-            System.out.print("Invalid input. Please enter a positive integer.");
-            sc.nextLine(); // Consume invalid input
         }
-        sc.close();
-        return idValidator(); 
     }
 
     public static void holdScreen(int time) {
@@ -49,29 +56,37 @@ public class App {
         System.out.println("3. About System");
     }
 
+    
+
     static int choiceSelector(Scanner sc, int lowerBound, int upperBound) {
         int choice = -1;
+
+        try {
         while (true) {
             System.out.print("Please select an option: ");
+
             if (sc.hasNextInt()) {
                 choice = sc.nextInt();
+                sc.nextLine(); // 
+
                 if (choice >= lowerBound && choice <= upperBound) {
                     return choice;
                 } else {
-                    System.out.println(String.format("Invalid input. Please enter a number between %d and %d",
-                            lowerBound, upperBound));
-                    // System.out.println("Press Enter to continue...");
-                    sc.nextLine();
-
+                    System.out.printf("Invalid input. Please enter a number between %d and %d%n",
+                            lowerBound, upperBound);
                 }
             } else {
-                System.out.println(String.format("Invalid input. Please enter a number between %d and %d", lowerBound,
-                        upperBound));
+                System.out.printf("Invalid input. Please enter a number between %d and %d%n",
+                        lowerBound, upperBound);
                 sc.nextLine(); // consume invalid input
-                // System.out.println("Press Enter to continue...");
-                // sc.nextLine();
             }
         }
+    }
+         catch (Exception e) {
+            System.out.println("An error occurred while processing your input: " + e.getMessage());
+            sc.nextLine(); // consume any invalid input
+        }
+        return choice; 
     }
 
     static void loginType() {
@@ -87,6 +102,7 @@ public class App {
     static void roleSelection() {
         Scanner sc = new Scanner(System.in);
         int loginChoice = choiceSelector(sc, 1, 4);
+        // sc.nextLine(); 
         Roles roles = new Roles();
         switch (loginChoice) {
             case 1 -> {
@@ -99,12 +115,16 @@ public class App {
                 roles.student();
             }
             case 4 -> {
-                clearConsole();
-                sc.nextLine();
-                return;
+                try {
+                    clearConsole();
+                    homeScreen();
+                    // sc.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Error " + e.getMessage());
+                }
             }
             default -> {
-                System.out.println("Invalid choice. Please try again.");
+                System.out.print("Invalid choice. Please try again.");
                 sc.nextLine();
 
                 // clearConsole();
@@ -116,6 +136,8 @@ public class App {
         Scanner sc = new Scanner(System.in);
         HandleDB dbHandler = new HandleDB();
         dbHandler.setupDatabase(); // Ensure the database is set up before proceeding
+        // String CYAN = "\u001B[36m";
+        // System.out.println(CYAN+"Welcome to the College Management System!");
         while (true) {
             clearConsole();
             homeScreen();
@@ -123,7 +145,6 @@ public class App {
             switch (choice) {
                 case 1 -> {
                     clearConsole();
-                    sc.nextLine();
                     loginType();
                     roleSelection();
 
@@ -131,7 +152,6 @@ public class App {
                 case 2 -> {
                     clearConsole();
                     System.out.println("Exiting the system. Goodbye!");
-                    sc.close();
                     return; // Exit the application
                 }
                 case 3 -> {
@@ -139,7 +159,6 @@ public class App {
                     System.out.println(
                             "This is a College Management System developed to manage student records, courses, and faculty information.");
                     System.out.print("Press Enter to return to the home screen...");
-                    sc.nextLine();
                     sc.nextLine();
                     clearConsole();
                 }

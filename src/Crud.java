@@ -47,7 +47,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error removing faculty: " + e.getMessage());
         }
-        System.out.println("Removing Faculty...");
     }
 
     public void updateFaculty() {
@@ -69,7 +68,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error updating faculty: " + e.getMessage());
         }
-        System.out.println("Updating Faculty Details...");
     }
 
     public void addStudent() {
@@ -95,7 +93,6 @@ public class Crud {
             System.out.println("Error adding student: " + e.getMessage());
         }
 
-        System.out.println("Adding Student...");
     }
 
     public void removeStudent() {
@@ -113,7 +110,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error removing student: " + e.getMessage());
         }
-        System.out.println("Removing Student...");
     }
 
     public void updateStudent() {
@@ -138,7 +134,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error updating student: " + e.getMessage());
         }
-        System.out.println("Updating Student Details...");
     }
 
     public void addCourse() {
@@ -160,7 +155,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error adding course: " + e.getMessage());
         }
-        System.out.println("Adding Course...");
     }
 
     public void removeCourse() {
@@ -178,8 +172,8 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error removing course: " + e.getMessage());
         }
-        System.out.println("Removing Course...");
     }
+
 
     public void updateCourse() {
         try {
@@ -200,7 +194,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error updating course: " + e.getMessage());
         }
-        System.out.println("Updating Course Details...");
     }
 
     public void addMarks() {
@@ -224,7 +217,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error adding marks: " + e.getMessage());
         }
-        System.out.println("Adding Marks...");
     }
 
     public void updateMarks() {
@@ -248,7 +240,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error updating marks: " + e.getMessage());
         }
-        System.out.println("Updating Marks...");
     }
 
     public void viewStudentMarks() {
@@ -267,7 +258,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error viewing marks: " + e.getMessage());
         }
-        System.out.println("Viewing Marks...");
     }
 
     public void viewCourses() {
@@ -286,7 +276,6 @@ public class Crud {
             System.out.println("Error viewing courses: " + e.getMessage());
         }
 
-        System.out.println("Viewing Courses...");
     }
 
     public void viewAssignedCourses() {
@@ -309,17 +298,13 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error viewing assigned courses: " + e.getMessage());
         }
-        System.out.println("Viewing Assigned Courses...");
     }
 
-    public void changeStudentPassword() {
+    public void changeStudentPassword(int sid) {
         try {
             Connection con = DriverManager.getConnection(url, username, password);
             String query = "UPDATE student_credentials SET password = ? WHERE sid = ?";
             PreparedStatement pstmt = con.prepareStatement(query);
-            System.out.print("Enter Student ID: ");
-            int sid = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
             System.out.print("Enter new Password: ");
             String newPassword = scanner.nextLine();
             pstmt.setString(1, newPassword);
@@ -327,13 +312,10 @@ public class Crud {
             int result = pstmt.executeUpdate();
             if (result > 0) {
                 System.out.println("Password updated successfully for Student ID: " + sid);
-                System.out.println("Press Enter to continue...");
-                scanner.nextLine(); // Wait for user to press Enter
             }
         } catch (SQLException e) {
             System.out.println("Error updating password: " + e.getMessage());
         }
-        System.out.println("Changing Student Password...");
     }
 
     public String[] fetchStudentDetails(int sid) {
@@ -422,9 +404,96 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error updating password: " + e.getMessage());
         }
-        System.out.println("Changing Student Password...");
+    }
+    public String[][] viewAllFaculty() {
+        try {
+            Connection con = DriverManager.getConnection(url, username, password);
+            String query1 = "SELECT COUNT(*) AS total FROM Faculty";
+            PreparedStatement pstmt = con.prepareStatement(query1);
+            ResultSet rs = pstmt.executeQuery();
+            int num = 0;
+            if (rs.next()) {
+                num = rs.getInt("total");
+            }
+
+            String query2 = "SELECT * FROM Faculty";
+            pstmt = con.prepareStatement(query2);
+            rs = pstmt.executeQuery();
+
+            String[][] fRecord = new String[num][2];
+            int i = 0;
+            while (rs.next()) {
+                fRecord[i][0] = String.valueOf(rs.getInt("fid"));
+                fRecord[i][1] = rs.getString("fname");
+                i++;
+            }
+            return fRecord;
+        } catch (SQLException e) {
+            System.out.println("Error fetching faculty records: " + e.getMessage());
+        }
+        return null; 
     }
 
+    public String[][] viewAllStudents(){
+        try {
+            Connection con = DriverManager.getConnection(url, username, password);
+            String query1 = "SELECT COUNT(*) AS total FROM Students";
+            PreparedStatement pstmt = con.prepareStatement(query1);
+            ResultSet rs=pstmt.executeQuery();
+            int num = 0;
+            if(rs.next()){
+                num=rs.getInt("total");
+            }
+            
+            String query2 = "SELECT * FROM Students";
+            pstmt = con.prepareStatement(query2);
+            rs = pstmt.executeQuery();
+
+            String[][] sRecord = new String[num][3];
+            int i = 0;
+            while (rs.next()) {
+                sRecord[i][0] = String.valueOf(rs.getInt("sid"));
+                sRecord[i][1] = rs.getString("sname");
+                sRecord[i][2] = rs.getString("dept");
+                i++;
+            }
+            return sRecord;
+        } catch (SQLException e) {
+            System.out.println("Error fetching student records: " + e.getMessage());
+        }
+        return null; // Placeholder return, implement logic to return student records
+    }
+
+    public String[][] viewAllCourses() {
+        try {
+            Connection con = DriverManager.getConnection(url, username, password);
+            String query1 = "SELECT COUNT(*) AS total FROM Course";
+            PreparedStatement pstmt = con.prepareStatement(query1);
+            ResultSet rs = pstmt.executeQuery();
+            int num = 0;
+            if (rs.next()) {
+                num = rs.getInt("total");
+            }
+
+            String query2 = "SELECT * FROM Course";
+            pstmt = con.prepareStatement(query2);
+            rs = pstmt.executeQuery();
+
+            String[][] cRecord = new String[num][2];
+            int i = 0;
+            while (rs.next()) {
+                cRecord[i][0] = String.valueOf(rs.getInt("cid"));
+                cRecord[i][1] = rs.getString("cname");
+                i++;
+            }
+            return cRecord;
+        } catch (SQLException e) {
+            System.out.println("Error fetching course records: " + e.getMessage());
+        }
+        return null; // Placeholder return, implement logic to return course records
+    }
+    
+    
 
     public void checkResults() {
         try {
@@ -447,7 +516,6 @@ public class Crud {
         } catch (SQLException e) {
             System.out.println("Error checking results: " + e.getMessage());
         }
-        System.out.println("Checking Results...");
     }
 
 }
